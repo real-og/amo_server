@@ -284,6 +284,11 @@ async def amo_request(method: str, path: str, payload: Any | None = None) -> dic
             json=payload,
         )
 
+    print("AMO URL:", url)
+    print("AMO STATUS:", response.status_code)
+    print("AMO RESPONSE:", response.text)
+    print("AMO PAYLOAD:", json.dumps(payload, ensure_ascii=False, indent=2))
+
     if response.status_code < 200 or response.status_code >= 300:
         logging.error("amoCRM error %s: %s", response.status_code, response.text)
 
