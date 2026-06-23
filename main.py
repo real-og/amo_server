@@ -238,7 +238,7 @@ def build_amo_payload(data: dict[str, Any]) -> list[dict[str, Any]]:
             "form_name": form_title,
             "form_page": normalize_text(data.get("page")),
             "ip": normalize_text(data.get("ip")),
-            "form_sent_at": str(created_at),
+            "form_sent_at": created_at,
             "referer": normalize_text(data.get("page")),
         },
 
