@@ -1,3 +1,5 @@
 .env
+.prod.env
+.dev.env
 Pipfile
 Pipfile.lock

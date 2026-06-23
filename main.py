@@ -361,39 +361,39 @@ async def receive_drupal_webform(request: Request):
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    # save_incoming_payload(data)
+    save_incoming_payload(data)
 
-    # logging.info(
-    #     "Incoming Drupal webform: form_nid=%s submission_id=%s",
-    #     data.get("form_nid"),
-    #     data.get("submission_id"),
-    # )
+    logging.info(
+        "Incoming Drupal webform: form_nid=%s submission_id=%s",
+        data.get("form_nid"),
+        data.get("submission_id"),
+    )
 
-    # amo_payload = build_amo_payload(data)
+    amo_payload = build_amo_payload(data)
 
-    # amo_response = await amo_request(
-    #     "POST",
-    #     "/api/v4/leads/unsorted/forms",
-    #     amo_payload,
-    # )
+    amo_response = await amo_request(
+        "POST",
+        "/api/v4/leads/unsorted/forms",
+        amo_payload,
+    )
 
-    # note_response = None
+    note_response = None
 
-    # if ADD_NOTE_TO_LEAD:
-    #     lead_id = extract_lead_id_from_unsorted_response(amo_response)
+    if ADD_NOTE_TO_LEAD:
+        lead_id = extract_lead_id_from_unsorted_response(amo_response)
 
-    #     if lead_id:
-    #         note_text = build_note_text(data)
-    #         note_response = await try_add_note_to_lead(lead_id, note_text)
-    #     else:
-    #         logging.warning("Lead ID was not found in amoCRM unsorted response")
+        if lead_id:
+            note_text = build_note_text(data)
+            note_response = await try_add_note_to_lead(lead_id, note_text)
+        else:
+            logging.warning("Lead ID was not found in amoCRM unsorted response")
 
-    # return {
-    #     "ok": True,
-    #     "message": "Webhook received and sent to amoCRM",
-    #     "form_nid": data.get("form_nid"),
-    #     "submission_id": data.get("submission_id"),
-    #     "amo_response": amo_response,
-    #     "note_response": note_response,
-    # }
+    return {
+        "ok": True,
+        "message": "Webhook received and sent to amoCRM",
+        "form_nid": data.get("form_nid"),
+        "submission_id": data.get("submission_id"),
+        "amo_response": amo_response,
+        "note_response": note_response,
+    }
     return {"ok": True,}
