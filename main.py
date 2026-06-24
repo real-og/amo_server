@@ -223,8 +223,15 @@ def build_amo_payload(data: dict[str, Any]) -> list[dict[str, Any]]:
     lead_name = f"Заявка с сайта M-TRANS.by — {form_title}"
 
     lead_payload: dict[str, Any] = {
-        "name": lead_name,
-    }
+    "name": lead_name,
+    "_embedded": {
+        "tags": [
+            {
+                "name": "сайт m-trans.by"
+            }
+        ]
+    },
+}
 
     item: dict[str, Any] = {
         "request_id": source_uid,
@@ -284,10 +291,10 @@ async def amo_request(method: str, path: str, payload: Any | None = None) -> dic
             json=payload,
         )
 
-    print("AMO URL:", url)
-    print("AMO STATUS:", response.status_code)
-    print("AMO RESPONSE:", response.text)
-    print("AMO PAYLOAD:", json.dumps(payload, ensure_ascii=False, indent=2))
+    # print("AMO URL:", url)
+    # print("AMO STATUS:", response.status_code)
+    # print("AMO RESPONSE:", response.text)
+    # print("AMO PAYLOAD:", json.dumps(payload, ensure_ascii=False, indent=2))
 
     if response.status_code < 200 or response.status_code >= 300:
         logging.error("amoCRM error %s: %s", response.status_code, response.text)
@@ -359,7 +366,7 @@ async def receive_drupal_webform(request: Request):
     Один endpoint для всех Drupal Webform-заявок.
     """
     raw_body = await request.body()
-    print(raw_body)
+    # print(raw_body)
 
     try:
         data = json.loads(raw_body.decode("utf-8"))
